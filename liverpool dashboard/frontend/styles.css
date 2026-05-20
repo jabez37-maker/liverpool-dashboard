@@ -180,29 +180,70 @@ body{
 =================================== */
 
 .table-row{
+
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
 
   background:#171717;
 
-  padding:20px;
+  padding:16px 20px;
 
   border-radius:14px;
 
-  margin-bottom:12px;
+  margin-bottom:10px;
 
   border:1px solid #222;
 
   transition:0.3s;
+
+  min-height:70px;
 }
 
 .table-row:hover{
   background:#202020;
 }
 
+.table-left{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+}
+
+.table-logo{
+
+  width:24px;
+
+  height:24px;
+
+  object-fit:contain;
+
+  flex-shrink:0;
+}
+
+.table-left span{
+
+  font-size:15px;
+
+  font-weight:500;
+}
+
+.table-row > span{
+
+  font-size:15px;
+
+  opacity:0.9;
+}
+
 .liverpool{
-  border:2px solid #c8102e;
+
+  border:1px solid #c8102e;
+
   background:#1f1215;
 }
 
