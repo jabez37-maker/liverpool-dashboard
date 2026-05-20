@@ -402,3 +402,23 @@ body{
   }
 
 }
+
+.watermark{
+
+  position:fixed;
+
+  bottom:15px;
+
+  right:20px;
+
+  color:rgba(255,255,255,0.25);
+
+  font-size:14px;
+
+  letter-spacing:1px;
+
+  pointer-events:none;
+
+  user-select:none;
+
+}
