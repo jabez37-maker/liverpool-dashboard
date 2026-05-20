@@ -1,0 +1,118 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#111;
+  color:white;
+  font-family:Arial;
+  padding:30px;
+}
+
+.container{
+  max-width:1400px;
+  margin:auto;
+}
+
+.hero{
+  background:#c8102e;
+  padding:35px;
+  border-radius:20px;
+  margin-bottom:30px;
+}
+
+.hero-left{
+  display:flex;
+  align-items:center;
+  gap:25px;
+}
+
+.hero img{
+  width:120px;
+  height:120px;
+  background:white;
+  border-radius:50%;
+  padding:10px;
+}
+
+.hero h1{
+  font-size:55px;
+  margin-bottom:10px;
+}
+
+.hero p{
+  font-size:20px;
+  margin-bottom:6px;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  margin-bottom:30px;
+}
+
+.metric-card{
+  background:#1d1d1d;
+  padding:25px;
+  border-radius:15px;
+}
+
+.metric-card h2{
+  color:#ff4757;
+  font-size:45px;
+}
+
+.section{
+  margin-bottom:40px;
+}
+
+.section h2{
+  margin-bottom:20px;
+  font-size:35px;
+}
+
+.players{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+.player{
+  background:#1d1d1d;
+  padding:20px;
+  border-radius:15px;
+}
+
+.player h3{
+  color:#ff4757;
+  margin-bottom:10px;
+}
+
+.match-card{
+  background:#1d1d1d;
+  padding:25px;
+  border-radius:15px;
+}
+
+.match{
+  background:#1d1d1d;
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:15px;
+}
+
+.table-row{
+  display:flex;
+  justify-content:space-between;
+  background:#1d1d1d;
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+
+.liverpool{
+  border:2px solid #c8102e;
+}
