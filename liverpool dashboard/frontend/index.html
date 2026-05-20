@@ -2,12 +2,19 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
   <title>Liverpool Dashboard</title>
 
-  <link rel="stylesheet" href="styles.css"/>
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  />
 
 </head>
 
@@ -21,11 +28,17 @@
 
     <div class="hero-left">
 
-      <img id="crest" src="" alt="crest"/>
+      <img
+        id="crest"
+        src=""
+        alt="crest"
+      />
 
       <div>
 
-        <h1 id="club-name">Loading...</h1>
+        <h1 id="club-name">
+          Loading...
+        </h1>
 
         <p id="stadium"></p>
 
@@ -42,23 +55,35 @@
   <div class="metrics">
 
     <div class="metric-card">
+
       <h2 id="wins">0</h2>
+
       <p>Wins</p>
+
     </div>
 
     <div class="metric-card">
+
       <h2 id="draws">0</h2>
+
       <p>Draws</p>
+
     </div>
 
     <div class="metric-card">
+
       <h2 id="losses">0</h2>
+
       <p>Losses</p>
+
     </div>
 
     <div class="metric-card">
+
       <h2 id="points">0</h2>
+
       <p>Points</p>
+
     </div>
 
   </div>
@@ -69,7 +94,10 @@
 
     <h2>Next Match</h2>
 
-    <div id="next-match" class="match-card">
+    <div
+      id="next-match"
+      class="match-card"
+    >
       Loading...
     </div>
 
@@ -85,24 +113,47 @@
 
   </div>
 
-  <!-- PLAYERS -->
+  <!-- SQUAD DROPDOWN -->
 
-  <div class="section">
+  <div class="section squad-section">
 
-    <h2>Squad Players</h2>
+    <div
+      class="dropdown-header"
+      id="toggle-squad"
+    >
 
-    <div class="players" id="players"></div>
+      <h2>Squad Players</h2>
+
+      <span id="dropdown-icon">
+        ▼
+      </span>
+
+    </div>
+
+    <div
+      class="players hidden"
+      id="players"
+    ></div>
 
   </div>
 
   <!-- STANDINGS -->
-   
 
   <div class="section">
 
     <h2>Premier League Standings</h2>
 
     <div id="standings"></div>
+
+  </div>
+
+  <!-- NEWS -->
+
+  <div class="section">
+
+    <h2>Liverpool News</h2>
+
+    <div id="news"></div>
 
   </div>
 

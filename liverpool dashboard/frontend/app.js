@@ -2,209 +2,463 @@ const API = "http://localhost:3000";
 
 async function loadDashboard(){
 
-  // ===================================
-  // TEAM DATA
-  // ===================================
+  try {
 
-  const teamRes = await fetch(`${API}/api/liverpool`);
-  const team = await teamRes.json();
+    // ===================================
+    // FETCH DATA
+    // ===================================
 
-  // ===================================
-  // STANDINGS
-  // ===================================
+    const [
+      teamRes,
+      standingsRes,
+      matchesRes,
+      newsRes
+    ] = await Promise.all([
 
-  const standingsRes =
-    await fetch(`${API}/api/standings`);
+      fetch(`${API}/api/liverpool`),
+      fetch(`${API}/api/standings`),
+      fetch(`${API}/api/matches`),
+      fetch(`${API}/api/news`)
 
-  const standingsData =
-    await standingsRes.json();
+    ]);
 
-  // ===================================
-  // MATCHES
-  // ===================================
+    const team =
+      await teamRes.json();
 
-  const matchesRes =
-    await fetch(`${API}/api/matches`);
+    const standingsData =
+      await standingsRes.json();
 
-  const matchesData =
-    await matchesRes.json();
+    const matchesData =
+      await matchesRes.json();
 
-  // ===================================
-  // HERO
-  // ===================================
+    const newsData =
+      await newsRes.json();
 
-  document.getElementById("crest").src =
-    team.crest;
+    // ===================================
+    // HERO
+    // ===================================
 
-  document.getElementById("club-name").innerText =
-    team.name;
+    document.getElementById("crest").src =
+      team.crest;
 
-  document.getElementById("stadium").innerText =
-    `🏟 ${team.venue}`;
+    document.getElementById("club-name").innerText =
+      team.name;
 
-  document.getElementById("manager").innerText =
-    `👔 ${team.coach.name}`;
+    document.getElementById("stadium").innerText =
+      `🏟 ${team.venue}`;
 
-  // ===================================
-  // PLAYERS
-  // ===================================
+    document.getElementById("manager").innerText =
+      `👔 ${team.coach.name}`;
 
-  const players =
-    document.getElementById("players");
+    // ===================================
+    // PLAYERS
+    // ===================================
 
-  players.innerHTML = "";
+    const players =
+      document.getElementById("players");
 
-  team.squad.forEach(player => {
+    players.innerHTML = "";
 
-    players.innerHTML += `
+    team.squad.forEach(player => {
 
-      <div class="player">
+      players.innerHTML += `
 
-        <h3>${player.name}</h3>
+        <div class="player">
 
-        <p>${player.position || "Unknown"}</p>
+          <h3>${player.name}</h3>
 
-        <p>${player.nationality}</p>
+          <p>
+            ${player.position || "Unknown"}
+          </p>
 
-      </div>
+          <p>
+            ${player.nationality}
+          </p>
 
-    `;
+        </div>
 
-  });
+      `;
 
-  // ===================================
-  // STANDINGS TABLE
-  // ===================================
+    });
 
-  const standings =
-    standingsData.standings[0].table;
+    // ===================================
+    // STANDINGS
+    // ===================================
 
-  const standingsDiv =
-    document.getElementById("standings");
+    const standings =
+      standingsData.standings[0].table;
 
-  standingsDiv.innerHTML = "";
+    const standingsDiv =
+      document.getElementById("standings");
 
-  standings.slice(0,10).forEach(team => {
+    standingsDiv.innerHTML = "";
 
-    standingsDiv.innerHTML += `
+    standings
+      .slice(0,10)
+      .forEach(team => {
 
-      <div class="table-row
-        ${team.team.name === "Liverpool FC"
-          ? "liverpool"
-          : ""}">
+        standingsDiv.innerHTML += `
 
-        <span>
-          ${team.position}.
-          ${team.team.name}
-        </span>
+          <div class="
+            table-row
+            ${team.team.name === "Liverpool FC"
+              ? "liverpool"
+              : ""}
+          ">
 
-        <span>
-          ${team.points} pts
-        </span>
+            <div class="table-left">
 
-      </div>
+              <img
+                src="${team.team.crest}"
+                class="table-logo"
+              />
 
-    `;
+              <span>
 
-  });
+                ${team.position}.
+                ${team.team.name}
 
-  // ===================================
-  // METRICS
-  // ===================================
+              </span>
 
-  const liverpool =
-    standings.find(
-      t => t.team.name === "Liverpool FC"
-    );
+            </div>
 
-  document.getElementById("wins").innerText =
-    liverpool.won;
+            <span>
+              ${team.points} pts
+            </span>
 
-  document.getElementById("draws").innerText =
-    liverpool.draw;
+          </div>
 
-  document.getElementById("losses").innerText =
-    liverpool.lost;
+        `;
 
-  document.getElementById("points").innerText =
-    liverpool.points;
+      });
 
-  // ===================================
-  // NEXT MATCH
-  // ===================================
+    // ===================================
+    // METRICS
+    // ===================================
 
-  const upcomingMatches =
-  matchesData.matches.filter(
-    match =>
-      match.status === "SCHEDULED" ||
-      match.status === "TIMED"
-  );
+    const liverpool =
+      standings.find(
+        t => t.team.name === "Liverpool FC"
+      );
 
-if (upcomingMatches.length > 0) {
+    if (liverpool) {
 
-  const nextMatch = upcomingMatches[0];
+      document.getElementById("wins").innerText =
+        liverpool.won;
 
-  document.getElementById("next-match").innerHTML = `
+      document.getElementById("draws").innerText =
+        liverpool.draw;
 
-    <h3>
-      ${nextMatch.homeTeam.name}
-      vs
-      ${nextMatch.awayTeam.name}
-    </h3>
+      document.getElementById("losses").innerText =
+        liverpool.lost;
 
-    <p>
-      📅 ${new Date(nextMatch.utcDate).toLocaleString()}
-    </p>
+      document.getElementById("points").innerText =
+        liverpool.points;
 
-    <p>
-      🏆 ${nextMatch.competition.name}
-    </p>
+    }
 
-  `;
+    // ===================================
+    // NEXT MATCH
+    // ===================================
 
-} else {
+    const upcomingMatches =
+      matchesData.matches.filter(
 
-  document.getElementById("next-match").innerHTML = `
-    <p>No upcoming matches found.</p>
-  `;
+        match =>
 
-}
-  // ===================================
-  // RECENT MATCHES
-  // ===================================
+          match.status === "SCHEDULED" ||
+          match.status === "TIMED"
 
-  const recentMatchesDiv =
-    document.getElementById("recent-matches");
+      );
 
-  recentMatchesDiv.innerHTML = "";
+    const nextMatchDiv =
+      document.getElementById("next-match");
 
-  const finishedMatches =
-    matchesData.matches
-      .filter(match => match.status === "FINISHED")
-      .slice(-5)
-      .reverse();
+    if (upcomingMatches.length > 0) {
 
-  finishedMatches.forEach(match => {
+      const nextMatch =
+        upcomingMatches[0];
 
-    recentMatchesDiv.innerHTML += `
-
-      <div class="match">
+      nextMatchDiv.innerHTML = `
 
         <h3>
-          ${match.homeTeam.name}
-          ${match.score.fullTime.home}
-          -
-          ${match.score.fullTime.away}
-          ${match.awayTeam.name}
+
+          ${nextMatch.homeTeam.name}
+
+          vs
+
+          ${nextMatch.awayTeam.name}
+
         </h3>
 
-      </div>
+        <p>
 
-    `;
+          📅
+          ${new Date(
+            nextMatch.utcDate
+          ).toLocaleString()}
 
-  });
+        </p>
+
+        <p>
+
+          🏆
+          ${nextMatch.competition.name}
+
+        </p>
+
+      `;
+
+    } else {
+
+      nextMatchDiv.innerHTML = `
+        <p>No upcoming matches found.</p>
+      `;
+
+    }
+
+    // ===================================
+    // RECENT MATCHES
+    // ===================================
+
+    const recentMatchesDiv =
+      document.getElementById(
+        "recent-matches"
+      );
+
+    recentMatchesDiv.innerHTML = "";
+
+    const finishedMatches =
+      matchesData.matches
+        .filter(
+          match =>
+            match.status === "FINISHED"
+        )
+        .slice(-5)
+        .reverse();
+
+    finishedMatches.forEach(match => {
+
+      const isLiverpoolHome =
+        match.homeTeam.name === "Liverpool FC";
+
+      const homeGoals =
+        match.score.fullTime.home;
+
+      const awayGoals =
+        match.score.fullTime.away;
+
+      let resultClass = "draw";
+
+      if (
+        (isLiverpoolHome && homeGoals > awayGoals) ||
+        (!isLiverpoolHome && awayGoals > homeGoals)
+      ) {
+        resultClass = "win";
+      }
+
+      if (
+        (isLiverpoolHome && homeGoals < awayGoals) ||
+        (!isLiverpoolHome && awayGoals < homeGoals)
+      ) {
+        resultClass = "loss";
+      }
+
+      recentMatchesDiv.innerHTML += `
+
+        <div class="match ${resultClass}">
+
+          <h3>
+
+            ${match.homeTeam.name}
+
+            ${homeGoals}
+
+            -
+
+            ${awayGoals}
+
+            ${match.awayTeam.name}
+
+          </h3>
+
+        </div>
+
+      `;
+
+    });
+
+    // ===================================
+    // CURRENT FORM
+    // ===================================
+
+    const formDiv =
+      document.getElementById("form");
+
+    if(formDiv){
+
+      formDiv.innerHTML = "";
+
+      finishedMatches
+        .slice(0,5)
+        .forEach(match => {
+
+          const isLiverpoolHome =
+            match.homeTeam.name === "Liverpool FC";
+
+          const homeGoals =
+            match.score.fullTime.home;
+
+          const awayGoals =
+            match.score.fullTime.away;
+
+          let form = "D";
+          let formClass = "form-draw";
+
+          if (
+            (isLiverpoolHome && homeGoals > awayGoals) ||
+            (!isLiverpoolHome && awayGoals > homeGoals)
+          ) {
+            form = "W";
+            formClass = "form-win";
+          }
+
+          if (
+            (isLiverpoolHome && homeGoals < awayGoals) ||
+            (!isLiverpoolHome && awayGoals < homeGoals)
+          ) {
+            form = "L";
+            formClass = "form-loss";
+          }
+
+          formDiv.innerHTML += `
+
+            <div class="
+              form-circle
+              ${formClass}
+            ">
+
+              ${form}
+
+            </div>
+
+          `;
+
+        });
+
+    }
+
+    // ===================================
+    // NEWS
+    // ===================================
+
+    const newsDiv =
+      document.getElementById("news");
+
+    newsDiv.innerHTML =
+      `<div class="news-grid"></div>`;
+
+    const newsGrid =
+      document.querySelector(
+        ".news-grid"
+      );
+
+    if (newsData.articles) {
+
+      newsData.articles
+        .slice(0,6)
+        .forEach(article => {
+
+          newsGrid.innerHTML += `
+
+            <div class="news-card">
+
+              ${
+                article.image
+                  ? `
+                    <img
+                      src="${article.image}"
+                      alt="news"
+                    >
+                  `
+                  : ""
+              }
+
+              <h3>
+
+                <a
+                  href="${article.url}"
+                  target="_blank"
+                >
+
+                  ${article.title}
+
+                </a>
+
+              </h3>
+
+              <p>
+
+                ${article.description || ""}
+
+              </p>
+
+            </div>
+
+          `;
+
+        });
+
+    }
+
+  } catch(error) {
+
+    console.error(error);
+
+  }
 
 }
 
+// ===================================
+// LOAD DASHBOARD
+// ===================================
 
 loadDashboard();
+
+// ===================================
+// DROPDOWN
+// ===================================
+
+const squadButton =
+  document.getElementById(
+    "toggle-squad"
+  );
+
+const playersDiv =
+  document.getElementById(
+    "players"
+  );
+
+const dropdownIcon =
+  document.getElementById(
+    "dropdown-icon"
+  );
+
+if(squadButton){
+
+  squadButton.addEventListener(
+    "click",
+    () => {
+
+      playersDiv.classList.toggle(
+        "hidden"
+      );
+
+      dropdownIcon.classList.toggle(
+        "rotate"
+      );
+
+    }
+  );
+
+}
