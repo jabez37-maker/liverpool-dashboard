@@ -5,7 +5,7 @@ async function loadDashboard(){
   try {
 
     // ===================================
-    // FETCH ALL DATA
+    // FETCH DATA
     // ===================================
 
     const [
@@ -94,7 +94,7 @@ async function loadDashboard(){
     standingsDiv.innerHTML = "";
 
     standings
-      .slice(0, 10)
+      .slice(0,10)
       .forEach(team => {
 
         standingsDiv.innerHTML += `
@@ -106,10 +106,21 @@ async function loadDashboard(){
               : ""}
           ">
 
-            <span>
-              ${team.position}.
-              ${team.team.name}
-            </span>
+            <div class="table-left">
+
+              <img
+                src="${team.team.crest}"
+                class="table-logo"
+              />
+
+              <span>
+
+                ${team.position}.
+                ${team.team.name}
+
+              </span>
+
+            </div>
 
             <span>
               ${team.points} pts
@@ -228,19 +239,44 @@ async function loadDashboard(){
 
     finishedMatches.forEach(match => {
 
+      const isLiverpoolHome =
+        match.homeTeam.name === "Liverpool FC";
+
+      const homeGoals =
+        match.score.fullTime.home;
+
+      const awayGoals =
+        match.score.fullTime.away;
+
+      let resultClass = "draw";
+
+      if (
+        (isLiverpoolHome && homeGoals > awayGoals) ||
+        (!isLiverpoolHome && awayGoals > homeGoals)
+      ) {
+        resultClass = "win";
+      }
+
+      if (
+        (isLiverpoolHome && homeGoals < awayGoals) ||
+        (!isLiverpoolHome && awayGoals < homeGoals)
+      ) {
+        resultClass = "loss";
+      }
+
       recentMatchesDiv.innerHTML += `
 
-        <div class="match">
+        <div class="match ${resultClass}">
 
           <h3>
 
             ${match.homeTeam.name}
 
-            ${match.score.fullTime.home}
+            ${homeGoals}
 
             -
 
-            ${match.score.fullTime.away}
+            ${awayGoals}
 
             ${match.awayTeam.name}
 
@@ -251,6 +287,66 @@ async function loadDashboard(){
       `;
 
     });
+
+    // ===================================
+    // CURRENT FORM
+    // ===================================
+
+    const formDiv =
+      document.getElementById("form");
+
+    if(formDiv){
+
+      formDiv.innerHTML = "";
+
+      finishedMatches
+        .slice(0,5)
+        .forEach(match => {
+
+          const isLiverpoolHome =
+            match.homeTeam.name === "Liverpool FC";
+
+          const homeGoals =
+            match.score.fullTime.home;
+
+          const awayGoals =
+            match.score.fullTime.away;
+
+          let form = "D";
+          let formClass = "form-draw";
+
+          if (
+            (isLiverpoolHome && homeGoals > awayGoals) ||
+            (!isLiverpoolHome && awayGoals > homeGoals)
+          ) {
+            form = "W";
+            formClass = "form-win";
+          }
+
+          if (
+            (isLiverpoolHome && homeGoals < awayGoals) ||
+            (!isLiverpoolHome && awayGoals < homeGoals)
+          ) {
+            form = "L";
+            formClass = "form-loss";
+          }
+
+          formDiv.innerHTML += `
+
+            <div class="
+              form-circle
+              ${formClass}
+            ">
+
+              ${form}
+
+            </div>
+
+          `;
+
+        });
+
+    }
 
     // ===================================
     // NEWS
@@ -270,7 +366,7 @@ async function loadDashboard(){
     if (newsData.articles) {
 
       newsData.articles
-        .slice(0, 6)
+        .slice(0,6)
         .forEach(article => {
 
           newsGrid.innerHTML += `
@@ -315,7 +411,7 @@ async function loadDashboard(){
 
     }
 
-  } catch (error) {
+  } catch(error) {
 
     console.error(error);
 
@@ -330,7 +426,7 @@ async function loadDashboard(){
 loadDashboard();
 
 // ===================================
-// SQUAD DROPDOWN
+// DROPDOWN
 // ===================================
 
 const squadButton =
@@ -348,17 +444,21 @@ const dropdownIcon =
     "dropdown-icon"
   );
 
-squadButton.addEventListener(
-  "click",
-  () => {
+if(squadButton){
 
-    playersDiv.classList.toggle(
-      "hidden"
-    );
+  squadButton.addEventListener(
+    "click",
+    () => {
 
-    dropdownIcon.classList.toggle(
-      "rotate"
-    );
+      playersDiv.classList.toggle(
+        "hidden"
+      );
 
-  }
-);
+      dropdownIcon.classList.toggle(
+        "rotate"
+      );
+
+    }
+  );
+
+}
